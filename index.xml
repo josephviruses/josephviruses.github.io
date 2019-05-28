@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Musings Online Chess</title>
+    <link>/</link>
+    <description>Recent content on Musings Online Chess</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 May 2016 21:48:51 -0700</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>/about/</link>
+      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
+      
+      <guid>/about/</guid>
+      <description>I am fascinated about chess engines. I wasn&amp;rsquo;t at first. In fact, the last time I ever used an engine for analysis, I used a version of Rybka. Like many people, I was interested with on the board chess when I was a kid, but I didn&amp;rsquo;t get serious about it. It all changed when news of a neural network engine called Alpha Zero. Doing some quick search, I landed in Agadmator&amp;rsquo;s YouTube channel, and that led me to Jerry&amp;rsquo;s ChessNetwork, and to KingsCrusher&amp;rsquo;s YouTube page.</description>
+    </item>
+    
+    <item>
+      <title>An attempt at analyzing the TCEC Season 15 SuFi openings</title>
+      <link>/2015/07/23/an-attempt-at-analyzing-the-tcec-season-15-sufi-openings/</link>
+      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      
+      <guid>/2015/07/23/an-attempt-at-analyzing-the-tcec-season-15-sufi-openings/</guid>
+      <description>My aim here is to try to analyze and make sense of what happened in the TCEC Seasono 15 SuFi, based on the ECO group of openings. Based on Jeroen Noomen’s blog, the following are the intended openings:
+ECO code distribution ECO A: 15 lines ECO B: 14 lines ECO C: 11 lines ECO D: 3 lines ECO E: 7 lines However, the ECO code distribution may have changed because of some transpositions.</description>
+    </item>
+    
+  </channel>
+</rss>

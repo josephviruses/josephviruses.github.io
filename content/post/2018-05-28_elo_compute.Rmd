@@ -1,0 +1,228 @@
+---
+title: "An attempt at analyzing the TCEC Season 15 SuFi openings"
+author: "Joseph V. Iris"
+date: 2015-07-23T21:13:14-05:00
+categories: ["R", "chess", "TCEC", "SuFi", "TCEC Season 15"]
+tags: ["chess", "TCEC", "SuFi", "TCEC Season 15"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+options(scipen = 1, digits = 5)
+```
+
+
+My aim here is to try to analyze and make sense of what happened in the TCEC Seasono 15 SuFi, based on the ECO group of openings.  Based on Jeroen Noomen's [blog](http://blogchess2016.blogspot.com/2019/04/opening-selection-tcec-15-superfinal.html), the following are the intended openings:
+
+```
+ECO code distribution
+ECO A: 15 lines
+ECO B: 14 lines
+ECO C: 11 lines
+ECO D: 3 lines
+ECO E: 7 lines
+```
+
+However, the ECO code distribution may have changed because of some transpositions.  I have stored the results of the TCEC Season 15 SuFi [here]("./leelasf2.csv").
+
+
+
+```{r}
+library(tidyverse)
+library(elo)
+library(knitr)
+library(DT)
+data <- read_delim("./leelasf2.csv", delim = ";")
+data %>% datatable()
+```
+
+First, let's estimate the ELO differences between Leela and Stockfish after every game.  Initially, the estimated ELO's are 3589 for Leela and 3587 for Stockfish.
+
+Let $R_A$ be the ELO of engine $A$ and $R_B$ be the rating of engine $B$. Then the expected result for engine A against B is given by the logistic equation:
+
+\begin{equation}
+E_A = \frac{1}{1+10^{(R_A-R_B)/400}}.
+\end{equation}
+
+Solving this equation for $R_A-R_B$, we have:
+
+\begin{equation}
+elodiff = R_A-R_B = 400\log_{10}\left( \frac{1-E_A}{E_A}\right)
+\end{equation}
+
+Here we note that $(1-E_A)/E_A$ can be expressed as win ratio / loss ratio without loss of generality.  That is, we can put the win ratio of the leading engine in the numerator and we get the same result.  The win ratio is the sum of the wins and draws.  
+
+In R, there is a package called [`elo`](https://CRAN.R-project.org/package=elo) which we will also use here.  But we can write our own functions for this purpose.
+
+```{r}
+elo <- function(win_ratio) {400 * log10(win_ratio / (1-win_ratio))}
+```
+
+We can also check for the standard errors of ELO differences using a normal approximation to the binomial distribution.
+
+```{r}
+denom95 <- function(win_ratio, total) qnorm(0.975) * sqrt(win_ratio * (1-win_ratio)/(total-1))
+```
+
+We can also compute for the LOS as described in the [chessprogramming wiki site](https://www.chessprogramming.org/Match_Statistics).  I used three estimators here.  `LOS3` might become untenable with large data sets, but we only have 100 rows of data here so it will be fine.
+
+```{r}
+LOS <- function(wins_losses, total) pnorm(total/2, sd = wins_losses)
+LOS2 <- function(wins, losses) pnorm((wins-losses)/sqrt(wins+losses))
+LOS3 <- function(wins, losses, draws) {
+  total = wins + losses + draws
+  exp = (wins/total)^wins * (losses/total)^losses * (draws/total)^draws
+  factorials = factorial(total)/(factorial(wins)*factorial(losses)*factorial(draws))
+  P = factorials * exp
+  1-P
+}
+```
+
+We will now extract the initials of the ECO codes, determin the points of Leela and SF after each game, the win rate (by the leading engine) after each game, the estimated ELO difference (`elodiff`) after each game, and the three LOS estimates after each game.
+
+```{r}
+data <- data %>%
+  mutate(ECO2 = substr(ECO1, start = 1, stop = 1)) %>%
+  # calculate Leela's scores
+  mutate(points.Leela = (White == "Leela") * points.White + (Black == "Leela") * points.Black) %>%
+  # calculate SF's scores
+  mutate(points.SF = (White == "SF") * points.White + (Black == "SF") * points.Black) %>%
+  mutate(results.Leela = case_when(points.Leela == 1~"Win", 
+                                   points.Leela == 0.5~"Draw",
+                                   points.Leela == 0~"Loss")) %>%
+  mutate(results.SF = case_when(points.SF == 1~"Win", 
+                                   points.SF == 0.5~"Draw",
+                                   points.SF == 0~"Loss")) %>%
+  # calculate cumulative scores
+  mutate(Score.Leela = cumsum(points.Leela)) %>%
+  mutate(Score.SF = cumsum(points.SF)) %>%
+  mutate(total = row_number()) %>%
+  mutate(draw_ratio = cumsum(points.Leela == points.SF)/total) %>%
+  mutate(wins.Leela = cumsum(results.Leela=="Win")) %>%
+  mutate(losses.Leela = cumsum(results.Leela=="Loss")) %>%
+  mutate(wins.SF = cumsum(results.SF=="Win")) %>%
+  mutate(losses.SF = cumsum(results.SF=="Loss")) %>%
+  mutate(Draws = cumsum(results.Leela=="Draw")) %>%
+  # calculate win rate of Leela
+  mutate(win_rate.Leela = Score.Leela/total) %>%
+  mutate(elodiff = elo(win_rate.Leela)) %>%
+  # calculate ELO's and LOS's
+  mutate(SE = elo(win_rate.Leela + denom95(win_rate.Leela, total))-elodiff) %>%
+  mutate(LOS = LOS(total*(1-draw_ratio), total)) %>%
+  mutate(LOS2 = LOS2(wins.Leela, losses.Leela)) %>%
+  mutate(LOS3 = LOS3(wins.Leela, losses.Leela, Draws)) 
+data %>% 
+  select(-White, -Black, -points.White, -points.Black, -Leela.openeval, -SF.openeval) %>% 
+  datatable()
+```
+
+We see that by game 94, when Leela breached the 50.5 mark, the ELO difference is about 26, but with large error bar.  The LOS's show though that there is very high likelihood that Leela is indeed stronger.  At the end of SuFi, the estimated ELO difference is about 24.
+
+The problem with ELO estimates based on results of chess engine tournaments is that each opening has to be played in reverse colors by each engine.  Also, there are families of ECO code openings.  As such, the ELO differences might actually be biased.  Also, the sample size of 100 is actually small, leading to the large error bars.
+
+Instead, we can calculate the ELO differences by ECO family of openings.  The estimates will have larger error bars because we now have smaller samples.  
+
+```{r}
+data2 <- data %>%
+  group_by(ECO2) %>%
+  mutate(ECO2.Score.Leela = cumsum(points.Leela)) %>%
+  mutate(ECO2.Score.SF = cumsum(points.SF)) %>%
+  mutate(ECO2.total = row_number()) %>%
+  mutate(ECO2.draw_ratio = cumsum(points.Leela == points.SF)/ECO2.total) %>%
+  mutate(ECO2.wins.Leela = cumsum(results.Leela=="Win")) %>%
+  mutate(ECO2.losses.Leela = cumsum(results.Leela=="Loss")) %>%
+  mutate(ECO2.wins.SF = cumsum(results.SF=="Win")) %>%
+  mutate(ECO2.losses.SF = cumsum(results.SF=="Loss")) %>%
+  mutate(ECO2.Draws = cumsum(results.Leela=="Draw")) %>%
+  mutate(ECO2.win_rate.Leela = ECO2.Score.Leela/ECO2.total) %>%
+  mutate(ECO2.elodiff = elo(ECO2.win_rate.Leela)) %>%
+  mutate(ECO2.SE = elo(ECO2.win_rate.Leela + denom95(ECO2.win_rate.Leela, ECO2.total))-ECO2.elodiff) %>%
+  mutate(ECO2.LOS = LOS(ECO2.total*(1-ECO2.draw_ratio), ECO2.total)) %>%
+  mutate(ECO2.LOS2 = LOS2(wins.Leela, losses.Leela)) %>%
+  mutate(ECO2.LOS3 = LOS3(wins.Leela, losses.Leela, Draws)) 
+```
+
+We can now see the estimated ELO differences at the last of game of each ECO group of openings.
+
+```{r}
+data2 %>%
+  slice(n()) %>% select(Opening, ECO1, starts_with("ECO2")) %>% datatable()
+```
+
+Here it is very interesting to note that Leela actually performed relatively better in A and E openings.  This is interesting because of the nature of the A and E openings.  In particular, Jeroen said that E openings are too easy for the current top programs and he considered them very drawish.   
+
+
+We can instead use the [`elo`]( https://CRAN.R-project.org/package=elo) package instead to calculate the ELO estimates.  This package doesn't have a function for estimating LOS though. The `elomod` object here is adjusted using a varying $K$ after each round.
+
+```{r}
+library(elo)
+initial <- c(3589, 3587)
+names(initial) <- c("Leela", "SF")
+elomod <- elo.run(score(points.Leela, points.SF)~White+Black + regress(ECO2, initial, 0.2) + k(20*log(abs(points.Leela - points.SF) + 1)),data = data, initial.elos = initial)
+summary(elomod)
+elodf <- as.data.frame(elomod)
+elodf$elodiff <- abs(elodf$elo.A - elodf$elo.B)
+elodf$actual_wins <- na.omit(data$Score.Leela)
+elodf <- elodf %>%
+  mutate(exp_wins = cumsum(1 / (1+10^(elodiff/400))))
+elodf %>% datatable()
+```
+
+
+Let us now investigate the evals.
+
+```{r}
+data_df <- data %>% gather(color, engine, White:Black)
+```
+
+
+```{r}
+data_dfwhite <- data_df %>%
+  filter(color == "White") %>%
+  group_by(engine) %>%
+  gather(evalengines, evals, Leela.openeval:SF.openeval) %>%
+  mutate(evalengines = str_remove(evalengines, ".openeval")) %>%
+  group_by(ECO2, evalengines) %>%
+  summarize(mean = round(mean(evals),3), sd = round(sd(evals)))
+data_dfwhite %>% datatable()
+```
+
+
+
+```{r, fig.height=8,fig.width=8}
+data_df %>%
+  filter(color == "White") %>%
+  group_by(engine) %>%
+  gather(evalengines, evals, Leela.openeval:SF.openeval) %>%
+  mutate(evalengines = str_remove(evalengines, ".openeval")) %>%
+  ggplot(aes(evals, color = evalengines)) + 
+  geom_density() +
+  facet_wrap(~ECO2+engine)
+```
+
+
+
+```{r}
+data_dfblack <- data_df %>%
+  filter(color == "Black") %>%
+  group_by(engine) %>%
+  gather(evalengines, evals, Leela.openeval:SF.openeval) %>%
+  mutate(evalengines = str_remove(evalengines, ".openeval")) %>%
+  group_by(ECO2, evalengines) %>%
+  summarize(mean = round(mean(evals),3), sd = round(sd(evals)))
+data_dfblack %>% datatable()
+```
+
+
+```{r, fig.height=8,fig.width=8}
+data_df %>%
+  filter(color == "Black") %>%
+  group_by(engine) %>%
+  gather(evalengines, evals, Leela.openeval:SF.openeval) %>%
+  mutate(evalengines = str_remove(evalengines, ".openeval")) %>%
+  ggplot(aes(evals, color = evalengines)) + 
+  geom_density() +
+  facet_wrap(~ECO2+engine)
+```
+
+We can see that Leela's opening evals are generally more optimistic than that of Stockfish, which can be attributed partly to SF's contempt.  But a closer inspection of Leela's evals, we see that they are consistent even if playing as different colors.  Leela also tends to win in openings where its opening evals are visibly more optimistic than that of Stockfish, signifying that Leela has better opening evaluation.
