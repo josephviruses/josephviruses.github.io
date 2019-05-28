@@ -1,7 +1,7 @@
 ---
 title: "An attempt at analyzing the TCEC Season 15 SuFi openings"
 author: "Joseph V. Iris"
-date: 2015-07-23T21:13:14-05:00
+date: 2019-05-28
 categories: ["R", "chess", "TCEC", "SuFi", "TCEC Season 15"]
 tags: ["chess", "TCEC", "SuFi", "TCEC Season 15"]
 code_folding: true
