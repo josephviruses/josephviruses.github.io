@@ -4,6 +4,7 @@ author: "Joseph V. Iris"
 date: 2015-07-23T21:13:14-05:00
 categories: ["R", "chess", "TCEC", "SuFi", "TCEC Season 15"]
 tags: ["chess", "TCEC", "SuFi", "TCEC Season 15"]
+code_folding: true
 ---
 
 ```{r setup, include=FALSE}
@@ -23,7 +24,7 @@ ECO D: 3 lines
 ECO E: 7 lines
 ```
 
-However, the ECO code distribution may have changed because of some transpositions.  I have stored the results of the TCEC Season 15 SuFi [here]("./leelasf2.csv").
+However, the ECO code distribution may have changed because of some transpositions.  I have stored the results of the TCEC Season 15 SuFi [here](https://raw.githubusercontent.com/josephviruses/josephviruses.github.io/master/content/post/leelasf2.csv).
 
 
 
