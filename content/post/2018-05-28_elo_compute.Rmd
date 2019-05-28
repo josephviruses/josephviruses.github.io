@@ -30,10 +30,10 @@ However, the ECO code distribution may have changed because of some transpositio
 ```{r}
 library(tidyverse)
 library(elo)
-library(knitr)
-library(DT)
+library(flextable)
+library(officer)
 data <- read_delim("./leelasf2.csv", delim = ";")
-data %>% datatable()
+data %>% flextable() %>% autofit()
 ```
 
 First, let's estimate the ELO differences between Leela and Stockfish after every game.  Initially, the estimated ELO's are 3589 for Leela and 3587 for Stockfish.
@@ -112,8 +112,8 @@ data <- data %>%
   mutate(LOS2 = LOS2(wins.Leela, losses.Leela)) %>%
   mutate(LOS3 = LOS3(wins.Leela, losses.Leela, Draws)) 
 data %>% 
-  select(-White, -Black, -points.White, -points.Black, -Leela.openeval, -SF.openeval) %>% 
-  datatable()
+  select(Opening, ECO2, win_rate.Leela:LOS3) %>% 
+  flextable() %>% autofit()
 ```
 
 We see that by game 94, when Leela breached the 50.5 mark, the ELO difference is about 26, but with large error bar.  The LOS's show though that there is very high likelihood that Leela is indeed stronger.  At the end of SuFi, the estimated ELO difference is about 24.
@@ -146,8 +146,20 @@ We can now see the estimated ELO differences at the last of game of each ECO gro
 
 ```{r}
 data2 %>%
-  slice(n()) %>% select(Opening, ECO1, starts_with("ECO2")) %>% datatable()
+  slice(n()) %>% select(starts_with("ECO2")) %>% 
+  select(1:8) %>%
+  flextable() %>% autofit()
 ```
+
+```{r}
+data2 %>%
+  slice(n()) %>% select(starts_with("ECO2")) %>% 
+  select(9:16) %>%
+  flextable() %>% autofit()
+```
+
+
+
 
 Here it is very interesting to note that Leela actually performed relatively better in A and E openings.  This is interesting because of the nature of the A and E openings.  In particular, Jeroen said that E openings are too easy for the current top programs and he considered them very drawish.   
 
@@ -162,10 +174,12 @@ elomod <- elo.run(score(points.Leela, points.SF)~White+Black + regress(ECO2, ini
 summary(elomod)
 elodf <- as.data.frame(elomod)
 elodf$elodiff <- abs(elodf$elo.A - elodf$elo.B)
-elodf$actual_wins <- na.omit(data$Score.Leela)
+elodf$actual_score <- na.omit(data$Score.Leela)
 elodf <- elodf %>%
-  mutate(exp_wins = cumsum(1 / (1+10^(elodiff/400))))
-elodf %>% datatable()
+  mutate(exp_score = cumsum(1 / (1+10^(elodiff/400))))
+elodf %>% 
+  mutate_if(is.numeric, function(x) round(x, 3)) %>%
+  flextable() %>% autofit()
 ```
 
 
@@ -184,7 +198,7 @@ data_dfwhite <- data_df %>%
   mutate(evalengines = str_remove(evalengines, ".openeval")) %>%
   group_by(ECO2, evalengines) %>%
   summarize(mean = round(mean(evals),3), sd = round(sd(evals)))
-data_dfwhite %>% datatable()
+data_dfwhite %>% flextable() %>% autofit()
 ```
 
 
@@ -210,7 +224,7 @@ data_dfblack <- data_df %>%
   mutate(evalengines = str_remove(evalengines, ".openeval")) %>%
   group_by(ECO2, evalengines) %>%
   summarize(mean = round(mean(evals),3), sd = round(sd(evals)))
-data_dfblack %>% datatable()
+data_dfblack %>% flextable() %>% autofit()
 ```
 
 
