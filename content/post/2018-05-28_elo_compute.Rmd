@@ -198,7 +198,7 @@ data_dfwhite <- data_df %>%
   gather(evalengines, evals, Leela.openeval:SF.openeval) %>%
   mutate(evalengines = str_remove(evalengines, ".openeval")) %>%
   group_by(ECO2, evalengines) %>%
-  summarize(mean = round(mean(evals),3), sd = round(sd(evals)))
+  summarize(mean = round(mean(evals),3), sd = round(sd(evals),3))
 data_dfwhite %>% flextable() %>% autofit()
 ```
 
@@ -224,7 +224,7 @@ data_dfblack <- data_df %>%
   gather(evalengines, evals, Leela.openeval:SF.openeval) %>%
   mutate(evalengines = str_remove(evalengines, ".openeval")) %>%
   group_by(ECO2, evalengines) %>%
-  summarize(mean = round(mean(evals),3), sd = round(sd(evals)))
+  summarize(mean = round(mean(evals),3), sd = round(sd(evals),3))
 data_dfblack %>% flextable() %>% autofit()
 ```
 
