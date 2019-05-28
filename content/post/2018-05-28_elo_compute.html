@@ -38,7 +38,7 @@ elodiff = R_A-R_B = 400\log_{10}\left( \frac{1-E_A}{E_A}\right)
 <p>Here we note that <span class="math inline">\((1-E_A)/E_A\)</span> can be expressed as win ratio / loss ratio without loss of generality. That is, we can put the win ratio of the leading engine in the numerator and we get the same result. The win ratio is the sum of the wins and draws.</p>
 <p>In R, there is a package called <a href="https://CRAN.R-project.org/package=elo"><code>elo</code></a> which we will also use here. But we can write our own functions for this purpose.</p>
 <pre class="r"><code>elo &lt;- function(win_ratio) {400 * log10(win_ratio / (1-win_ratio))}</code></pre>
-<p>We can also check for the standard errors of ELO differences using a normal approximation to the binomial distribution.</p>
+<p>We can also check for the standard errors of ELO differences using a normal approximation.</p>
 <pre class="r"><code>denom95 &lt;- function(win_ratio, total) qnorm(0.975) * sqrt(win_ratio * (1-win_ratio)/(total-1))</code></pre>
 <p>We can also compute for the LOS as described in the <a href="https://www.chessprogramming.org/Match_Statistics">chessprogramming wiki site</a>. I used three estimators here. <code>LOS3</code> might become untenable with large data sets, but we only have 100 rows of data here so it will be fine.</p>
 <pre class="r"><code>LOS &lt;- function(wins_losses, total) pnorm(total/2, sd = wins_losses)

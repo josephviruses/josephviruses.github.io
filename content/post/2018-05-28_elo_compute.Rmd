@@ -59,7 +59,7 @@ In R, there is a package called [`elo`](https://CRAN.R-project.org/package=elo) 
 elo <- function(win_ratio) {400 * log10(win_ratio / (1-win_ratio))}
 ```
 
-We can also check for the standard errors of ELO differences using a normal approximation to the binomial distribution.
+We can also check for the standard errors of ELO differences using a normal approximation.
 
 ```{r}
 denom95 <- function(win_ratio, total) qnorm(0.975) * sqrt(win_ratio * (1-win_ratio)/(total-1))
