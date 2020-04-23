@@ -88,7 +88,7 @@ evals_2pl <- evals_nona %>%
   bind_rows() 
 ```
 
-The Superfinals of the 17th season of the [Top Engine Chess Championship (TCEC)](https://www.tcec-chess.com/) has just concluded and [Leela Chess Zero](https://lczero.org/) emerged as the champion against the mighty [Stockfish](https://stockfishchess.org/) with a final score of 52.5-47.5. Leela won 17 games (16 as white and 1 as black), drew 71 games, and lost 12 games (11 as white and 1 as black), to become the TCEC champion for the second time, after failing to qualify in season 16 (although it was undefeated in the Premier Division). 
+The Superfinals of the 17th season of the [Top Engine Chess Championship (TCEC)](https://www.tcec-chess.com/) has just concluded and [Leela Chess Zero](https://lczero.org/) emerged as the champion against the mighty [Stockfish](https://stockfishchess.org/) with a final score of 52.5-47.5. Leela won 17 games (16 as white and 1 as black), drew 71 games, and lost 12 games (11 as black and 1 as white), to become the TCEC champion for the second time, after failing to qualify in season 16 (although it was undefeated in the Premier Division). 
 
 The breakdown of the results is shown in the table below.
 
@@ -109,20 +109,12 @@ names %>%  calc_cro(TerminationDetails, list(total(), White %nest% Result)) %>% 
 ```
 </div>
 
-~~It shall be noted that the cutechess implementation by TCEC was not updated to properly convert Leela's evaluation into centipawns.~~ __It was actually the code for centipawn conversion that had to updated.__[^5] The result was the very low centipawn evaluation scores shown by Lc0 even at more than 90% losing rate. This may account for the 7 losses from mates seen during the SuFi.
+~~It shall be noted that the cutechess implementation by TCEC was not updated to properly convert Leela's evaluation into centipawns.~~ __It was actually the code for centipawn conversion that had to be updated.__[^5] The result was the very low centipawn evaluation scores shown by Lc0 even at more than 90% losing rate. This may account for the 7 losses from mates seen during the SuFi.
 
 [^5]: https://github.com/LeelaChessZero/lc0/pull/1193
 
 
-```{r, eval=F}
-evals_2pl %>%  
-  tab_cells(evals) %>%
-  tab_rows(game) %>%
-  tab_cols(engine %nest% Color) %>%
-  tab_stat_mean() %>%
-  tab_pivot()
-#  calc_cro(evals, list(total(), engine %nest% Color))
-```
+![Table of results](/josephviruses.github.io/content/post/first_table.png)
 
 ```{r}
 opening_evals <- evals_2pl %>% select(-plies, -Color) %>% pivot_wider(names_from = engine, values_from = evals) 
