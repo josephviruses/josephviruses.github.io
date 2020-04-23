@@ -1,10 +1,20 @@
 ---
 title: "An attempt at analyzing the TCEC Season 15 SuFi openings"
 author: "Joseph V. Iris"
-date: 2019-05-28
-categories: ["R", "chess", "TCEC", "SuFi", "TCEC Season 15"]
-tags: ["chess", "TCEC", "SuFi", "TCEC Season 15"]
-code_folding: true
+date: '2019-05-28'
+output: pdf_document
+code_folding: yes
+tags:
+- chess
+- TCEC
+- SuFi
+- TCEC Season 15
+categories:
+- R
+- chess
+- TCEC
+- SuFi
+- TCEC Season 15
 ---
 
 ```{r setup, include=FALSE}
@@ -79,7 +89,7 @@ LOS3 <- function(wins, losses, draws) {
 }
 ```
 
-We will now extract the initials of the ECO codes, determin the points of Leela and SF after each game, the win rate (by the leading engine) after each game, the estimated ELO difference (`elodiff`) after each game, and the three LOS estimates after each game.
+We will now extract the initials of the ECO codes, determine the points of Leela and SF after each game, the win rate (by the leading engine) after each game, the estimated ELO difference (`elodiff`) after each game, and the three LOS estimates after each game.
 
 ```{r}
 data <- data %>%

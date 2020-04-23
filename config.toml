@@ -5,7 +5,7 @@ title = "Musings Online Chess"
 theme = "hugo-lithium"
 googleAnalytics = ""
 disqusShortname = ""
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$", "elo_compute2.Rmd"]
 enableEmoji = true
 
 [permalinks]

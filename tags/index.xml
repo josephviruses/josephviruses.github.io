@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Musings Online Chess</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 29 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>SuFi</title>
       <link>/tags/sufi/</link>
-      <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/sufi/</guid>
       <description></description>
@@ -23,7 +23,7 @@
     <item>
       <title>TCEC</title>
       <link>/tags/tcec/</link>
-      <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/tcec/</guid>
       <description></description>
@@ -32,16 +32,34 @@
     <item>
       <title>TCEC Season 15</title>
       <link>/tags/tcec-season-15/</link>
-      <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/tcec-season-15/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>Twitch</title>
+      <link>/tags/twitch/</link>
+      <pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/twitch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Twitch chat commands</title>
+      <link>/tags/twitch-chat-commands/</link>
+      <pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/twitch-chat-commands/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>chess</title>
       <link>/tags/chess/</link>
-      <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/chess/</guid>
       <description></description>
