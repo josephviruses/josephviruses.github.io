@@ -346,7 +346,7 @@ ggplotly(p2)
 We also see that for this SuFi, the rooks and the king moved the most, perhaps due to many pawn and rook endings.
 
 <center>
-```{r}
+```{r, fig.cap="Distribution of number of moves by piece"}
 # cols = c("W_B_moves", "W_K_moves", "W_N_moves", "W_O_moves", "W_Q_moves", "W_R_moves", "B_B_moves", "B_K_moves", "B_N_moves", "B_O_moves", "B_Q_moves", "B_R_moves", "B_moves", "K_moves", "N_moves", "O_moves", "Q_moves", "R_moves"
 p4 <- sufi17 %>% 
   gather(key="Piece", value="NMoves", B_moves:N_moves, Q_moves:R_moves) %>%
