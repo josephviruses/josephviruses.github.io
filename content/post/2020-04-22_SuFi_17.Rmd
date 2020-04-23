@@ -107,7 +107,6 @@ names <- apply_labels(names,
 #table1[,1] = NULL
 #table1 <- bind_cols(table2, table1)
 #table1_flex <- table1 %>% flextable()  %>% autofit()
-#table1_flex %>% add_header_row(c("","Stockfish","Stockfish","Stockfish", "Leela Chess Zero", "Leela Chess Zero", "Leela Chess Zero", "Overall","Overall","Overall"), top = FALSE) %>% merge_h(part = "header") %>% autofit()
 ```
 
 
@@ -315,7 +314,7 @@ data2 %>%
 
 We see that Leela racked up the lead through the A and C openings in this season.
 
-Looking at the opening evaluations by ECO family of codes, we can see that the opening evaluations do not differ when Leela played white and SF played black. But the opening evaluations differed a lot when SF played black. Notice though that D openings were evaluated almost similarly by Stockfish and Leela.
+Looking at the opening evaluations by ECO family of codes, we can see that the opening evaluations do not differ when Stockfish played white and Leela played black. But the opening evaluations differed a lot when SF played black and Leela played white. Notice though that D openings were evaluated almost similarly by Stockfish and Leela.
 
 <center>
 ```{r, fig.height=8, fig.width=6, fig.cap="Distribution of opening evaluations for different ECO codes"}
