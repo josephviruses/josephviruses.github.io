@@ -6,20 +6,18 @@
     <description>Recent content on Musings Online Chess</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 23 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>A Leela Chess Zero Fan&#39;s TCEC Twitch Chat Emotes and Commands Guide</title>
-      <link>/2019/05/29/a-leela-chess-zero-fans-tcec-twitch-chat-emotes-and-commands-guide/</link>
-      <pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate>
+      <title>TCEC Season 17 SuFi</title>
+      <link>/2020/04/23/tcec-season-17-sufi/</link>
+      <pubDate>Thu, 23 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/2019/05/29/a-leela-chess-zero-fans-tcec-twitch-chat-emotes-and-commands-guide/</guid>
-      <description>!chat
-Nightbot: &#34;Welcome to the TCEC chatroom, where we discuss everything but chess.&#34;
-The Top Engine Chess Championship experience cannot be complete without the chat. The chat is hosted via Twitch and so it inherits the features of Twitch chats including some global emotes and the more than occassional toxicity, even among supposedly more educated and mostly STEM leaning chatters–who are perhaps mostly computer and engineering geeks and math nerds I surmise.</description>
+      <guid>/2020/04/23/tcec-season-17-sufi/</guid>
+      <description>The Superfinals of the 17th season of the Top Engine Chess Championship (TCEC) has just concluded and Leela Chess Zero emerged as the champion against the mighty Stockfish with a final score of 52.5-47.5. Leela won 17 games (16 as white and 1 as black), drew 71 games, and lost 12 games (11 as white and 1 as black), to become the TCEC champion for the second time, after failing to qualify in season 16 although it was undefeated in the Premier Division.</description>
     </item>
     
     <item>

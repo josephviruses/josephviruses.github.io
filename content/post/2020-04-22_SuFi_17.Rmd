@@ -1,7 +1,7 @@
 ---
-title: "TCEC Season 15 SuFi"
+title: "TCEC Season 17 SuFi"
 author: "Josephus Viridis"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: "2020-04-23"
 output:
   html_document:
     df_print: paged
@@ -316,7 +316,7 @@ We see that Leela racked up the lead through the A and E openings in this season
 Looking at the opening evaluations by ECO family of codes, we can see that the opening evaluations do not differ when Leela played white and SF played black. But the opening evaluations differed a lot when SF played black. Notice though that D openings were evaluated almost similarly by Stockfish and Leela.
 
 <center>
-```{r, fig.height=8, fig.width=6}
+```{r, fig.height=8, fig.width=6, fig.cap="Distribution of opening evaluations for different ECO codes"}
 library(stickylabeller)
 data_df %>% 
   mutate(White=rep_len(c("SF", "Lc0"), 100)) %>%
@@ -325,6 +325,7 @@ data_df %>%
   ggplot(aes(`Opening Evaluation`, color = Engine)) + geom_density() + facet_wrap(.~ECO+White, labeller = label_glue("({.l}) White={White}\nECO={ECO}"), nrow=5)
 ```
 </center>
+
 Quite interesting too is the number of moves in each game (mean =`r round(mean(sufi17$NMoves),2)`, sd =`r round(sd(sufi17$NMoves),2)`). Games were considerably quite shorter if Stockfish was playing white (mean =`r round(mean(sufi17$NMoves[sufi17$White=="Stockfish 20200407DC"]),2)`, sd =`r round(sd(sufi17$NMoves[sufi17$White=="Stockfish 20200407DC"]),2)`), specially when it was winning (mean = `r round(mean(sufi17$NMoves[sufi17$White=="Stockfish 20200407DC" & sufi17$Result=="1-0"]),2)`, sd = `r round(sd(sufi17$NMoves[sufi17$White=="Stockfish 20200407DC" & sufi17$Result=="1-0"]),2)`). Games took a while to finish when Leela was playing white (mean = `r round(mean(sufi17$NMoves[sufi17$White=="LCZero v0.24-sv-t60-3010" ]),2)`, sd = `r round(sd(sufi17$NMoves[sufi17$White=="LCZero v0.24-sv-t60-3010"]),2)`), specially when it was winning (mean = `r round(mean(sufi17$NMoves[sufi17$White=="LCZero v0.24-sv-t60-3010" & sufi17$Result=="1-0"]),2)`, sd = `r round(sd(sufi17$NMoves[sufi17$White=="LCZero v0.24-sv-t60-3010" & sufi17$Result=="1-0"]),2)`). However, SF lost as white (game 95, 93 moves) in much shorter time than it did winning as black (game 16, 196 moves, coming via a long series of high level shuffling from a fortress-y position, after Leela pressed for activity as discussed above).
 
 <center>
@@ -364,7 +365,8 @@ ggplotly(p4)
 
 Finally, Leela's evaluations seemed to agree with SF's evaluation up to a certain centipawn value only, around $(-3,3)$. The reason was that TCEC had yet to update the system to reflect correct centipawn evaluation. This resulted in a lot of mates during the competition. Here is an attempt to model Leela's centipawn evaluation based on SF's evaluation. I have stored the matched evaluations throughout the games [here](https://raw.githubusercontent.com/josephviruses/josephviruses.github.io/master/content/post//evals_tcec.csv). This CSV file contains all of the evaluations in all games for which Leela's evaluation is in $(-4,4)$ and Stockfish's evaluation is in $(-20,20)$.  The reason for the choice of limits is nothing special--one engine evaluation seem to be well-behaved with respect to the other engine evaluation. I have also removed the last move of the engine with the greater number of moves so that the number of evaluations will match.
 
-```{r}
+<center>
+```{r, fig.cap="Plot of Leela's evaluations against Stockfish's evaluations"}
 evals_comp <- evals_nona %>% select(-plies, -Color) %>% pivot_wider(names_from = c("engine"), values_from = "evals") %>% mutate(
   nLc0 = unlist(map(Lc0, length)),
   nSF = unlist(map(SF, length))
@@ -380,6 +382,7 @@ evals_comp <- evals_nona %>% select(-plies, -Color) %>% pivot_wider(names_from =
   filter(Lc0 < 20, Lc0 >-20, SF < 20, SF > -20)
 evals_comp %>% ggplot(aes(SF, Lc0)) + geom_point()
 ```
+</center>
 
 I fitted a logistic curve to the evaluations. To do this, I added 20 to SF's evals and 4 to Leela's evals and proceeded to fit the model in R.
 
@@ -404,7 +407,8 @@ model<-nls(y~phi1/(1+exp(-(phi2+phi3*x))),
 summary(model)
 ```
 
-```{r, echo=TRUE}
+<center>
+```{r, echo=TRUE, fig.cap="Logistic fit over Leela and Stockfish's evaluations."}
 #set parameters
 phi1<-coef(model)[1]
 phi2<-coef(model)[2]
@@ -418,5 +422,5 @@ geom_point(size=1)+theme_bw()+
 labs(x='SF',y='Lc0')+
 geom_line(data=predict,aes(x=x,y=y), size=1, color = "blue")
 ```
-
+</center>
 

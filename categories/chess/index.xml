@@ -6,10 +6,19 @@
     <description>Recent content in chess on Musings Online Chess</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 23 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/chess/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>TCEC Season 17 SuFi</title>
+      <link>/2020/04/23/tcec-season-17-sufi/</link>
+      <pubDate>Thu, 23 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/04/23/tcec-season-17-sufi/</guid>
+      <description>The Superfinals of the 17th season of the Top Engine Chess Championship (TCEC) has just concluded and Leela Chess Zero emerged as the champion against the mighty Stockfish with a final score of 52.5-47.5. Leela won 17 games (16 as white and 1 as black), drew 71 games, and lost 12 games (11 as white and 1 as black), to become the TCEC champion for the second time, after failing to qualify in season 16 although it was undefeated in the Premier Division.</description>
+    </item>
     
     <item>
       <title>An attempt at analyzing the TCEC Season 15 SuFi openings</title>
