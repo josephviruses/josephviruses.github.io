@@ -313,7 +313,7 @@ data2 %>%
 ```
 
 
-We see that Leela racked up the lead through the A and E openings in this season.
+We see that Leela racked up the lead through the A and C openings in this season.
 
 Looking at the opening evaluations by ECO family of codes, we can see that the opening evaluations do not differ when Leela played white and SF played black. But the opening evaluations differed a lot when SF played black. Notice though that D openings were evaluated almost similarly by Stockfish and Leela.
 
