@@ -93,13 +93,15 @@ The Superfinals of the 17th season of the [Top Engine Chess Championship (TCEC)]
 The breakdown of the results is shown in the table below.
 
 <div align='center'>
+![Table of results](/josephviruses.github.io/content/post/first_table.png)
+</div>
 ```{r}
 names <- sufi17 %>% select(TerminationDetails, White, Result)
 names <- apply_labels(names, 
                       TerminationDetails = "Termination Details",
                       White = "Engine",
                       Result = "Result")
-names %>%  calc_cro(TerminationDetails, list(total(), White %nest% Result)) %>% set_caption("Breakdown of results by details of termination and engine")
+
 
 #table2[, 5] = NULL
 #table1[,1] = NULL
@@ -107,14 +109,22 @@ names %>%  calc_cro(TerminationDetails, list(total(), White %nest% Result)) %>% 
 #table1_flex <- table1 %>% flextable()  %>% autofit()
 #table1_flex %>% add_header_row(c("","Stockfish","Stockfish","Stockfish", "Leela Chess Zero", "Leela Chess Zero", "Leela Chess Zero", "Overall","Overall","Overall"), top = FALSE) %>% merge_h(part = "header") %>% autofit()
 ```
-</div>
+
 
 ~~It shall be noted that the cutechess implementation by TCEC was not updated to properly convert Leela's evaluation into centipawns.~~ __It was actually the code for centipawn conversion that had to be updated.__[^5] The result was the very low centipawn evaluation scores shown by Lc0 even at more than 90% losing rate. This may account for the 7 losses from mates seen during the SuFi.
 
 [^5]: https://github.com/LeelaChessZero/lc0/pull/1193
 
 
-![Table of results](/josephviruses.github.io/content/post/first_table.png)
+```{r, eval=F}
+evals_2pl %>%  
+  tab_cells(evals) %>%
+  tab_rows(game) %>%
+  tab_cols(engine %nest% Color) %>%
+  tab_stat_mean() %>%
+  tab_pivot()
+#  calc_cro(evals, list(total(), engine %nest% Color))
+```
 
 ```{r}
 opening_evals <- evals_2pl %>% select(-plies, -Color) %>% pivot_wider(names_from = engine, values_from = evals) 
