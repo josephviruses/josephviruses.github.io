@@ -111,7 +111,7 @@ names <- apply_labels(names,
 ```
 
 
-~~It shall be noted that the cutechess implementation by TCEC was not updated to properly convert Leela's evaluation into centipawns.~~ __It was actually the code for centipawn conversion that had to be updated.__[^5] The result was the very low centipawn evaluation scores shown by Lc0 even at more than 90% losing rate. This may account for the 7 losses from mates seen during the SuFi.
+~~It shall be noted that the cutechess implementation by TCEC was not updated to properly convert Leela's evaluation into centipawns.~~ __It was actually the code for centipawn conversion that had to be updated.__[^5] The result was the very low centipawn evaluation scores shown by Lc0 even at more than 90% losing evaluation. This may account for the 7 losses from mates seen during the SuFi.
 
 [^5]: https://github.com/LeelaChessZero/lc0/pull/1193
 
