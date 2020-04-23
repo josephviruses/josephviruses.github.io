@@ -407,8 +407,7 @@ model<-nls(y~phi1/(1+exp(-(phi2+phi3*x))),
 summary(model)
 ```
 
-<center>
-```{r, echo=TRUE, fig.cap="Logistic fit over Leela and Stockfish's evaluations."}
+```{r, echo=TRUE}
 #set parameters
 phi1<-coef(model)[1]
 phi2<-coef(model)[2]
@@ -416,11 +415,15 @@ phi3<-coef(model)[3]
 x<-c(min(data.df$x):max(data.df$x)) #construct a range of x values bounded by the data
 y<-phi1/(1+exp(-(phi2+phi3*(x)))) #predicted SF's evals
 predict<-data.frame(x=x-20,y=y-4) #create the prediction data frame
+```
+
+
+```{r, echo=TRUE, fig.cap="Logistic fit over Leela and Stockfish's evaluations.", fig.align='center'}
 # create a plot of actual values and the predictions from fitted model
 ggplot(data=evals_comp,aes(x=SF,y=Lc0))+
 geom_point(size=1)+theme_bw()+
 labs(x='SF',y='Lc0')+
 geom_line(data=predict,aes(x=x,y=y), size=1, color = "blue")
 ```
-</center>
+
 
