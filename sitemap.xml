@@ -27,25 +27,25 @@
   </url>
   
   <url>
-    <loc>/tags/sufi/</loc>
-    <lastmod>2020-04-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/categories/sufi/</loc>
     <lastmod>2020-04-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/tcec/</loc>
+    <loc>/tags/sufi/</loc>
     <lastmod>2020-04-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/tcec/</loc>
+    <lastmod>2020-04-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/tcec/</loc>
     <lastmod>2020-04-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -68,13 +68,13 @@
   </url>
   
   <url>
-    <loc>/tags/chess/</loc>
+    <loc>/categories/chess/</loc>
     <lastmod>2020-04-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/chess/</loc>
+    <loc>/tags/chess/</loc>
     <lastmod>2020-04-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -85,13 +85,13 @@
   </url>
   
   <url>
-    <loc>/tags/tcec-season-15/</loc>
+    <loc>/categories/tcec-season-15/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/tcec-season-15/</loc>
+    <loc>/tags/tcec-season-15/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>

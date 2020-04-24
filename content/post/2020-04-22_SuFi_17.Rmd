@@ -130,7 +130,7 @@ opening_evals <- evals_2pl %>% select(-plies, -Color) %>% pivot_wider(names_from
 sufi17 <- bind_cols(sufi17, opening_evals)
 ```
 
-Below is the plot of the results of games for each engine playing as white. No opening was evaluated negatively by the engines. Note that because of contempt[^1], SF evaluates the opening positions very conservatively as black compared to when it is playing as white. Be that as it may, the difference between Leela's evaluation as white and SF's evaluation as black is remarkable. Some chatters say that this could have affected SF's performance. It has been claimed in chat that a contempt of 0 performs better against Leela. It is notable that many of the wins of Leela as white came from when its opening book evaluation was around 1 or when SF's opening book evaluation was less than 0.5. Most notable is game 94, (Queen's pawn game, Chigorin variation), which SF evaluated as 0.03 out of the opening book; Leela gave an evaluation of 1.18. In the reverse game that SF won as white, SF gave an evaluation of 1.55; on the other hand, Leela gave an evaluation of 1.1, which was not far from its evaluation when playing as white. While both of Leela and SF's evaluations agree when SF was playing as white, there were some notable exceptions, specially game 7, which Leela evaluated 0.6 and Stockfish evaluated as 1.43.
+Below is the plot of the results of games for each engine playing as white. Note that because of contempt[^1], SF evaluates the opening positions very conservatively as black compared to when it is playing as white. Be that as it may, the difference between Leela's evaluation as white and SF's evaluation as black is remarkable. Some chatters say that this could have affected SF's performance. It has been claimed in chat that a contempt of 0 performs better against Leela. It is notable that many of the wins of Leela as white came from when its opening book evaluation was around 1 or when SF's opening book evaluation was less than 0.5. Most notable is game 94, (Queen's pawn game, Chigorin variation), which SF evaluated as 0.03 out of the opening book; Leela gave an evaluation of 1.18. In the reverse game that SF won as white, SF gave an evaluation of 1.55; on the other hand, Leela gave an evaluation of 1.1, which was not far from its evaluation when playing as white. While both of Leela and SF's evaluations agree when SF was playing as white, there were some notable exceptions, specially game 7, which Leela evaluated 0.6 and Stockfish evaluated as 1.43.
 
 
 [^1]: SF submitted a special binary that is supposed to have a contempt of 24 when playing as white, and a contempt of 0 when playing as black (DC=double contempt in the TCEC label for Stockfish). However, the settings were  "misfixed" since with black the contempt $c=0$ applies only to the first three moves in every iteration, but not after; hence, the contempt is effectively $c=24$.
@@ -144,12 +144,15 @@ ann_text2 <- data.frame(Lc0 = 0.4, SF=1.55, White = factor("Stockfish 20200407DC
 ann_texta <- data.frame(Lc0 = 0.1, SF=1.7, White = factor("LCZero v0.24-sv-t60-3010", levels = c("LCZero v0.24-sv-t60-3010", "Stockfish 20200407DC")), Result=factor(c("1-0", levels = c("1-0", "1/2-1/2", "0-1"))), game = factor(94, levels=1:100))
 ann_textb <- data.frame(Lc0 = 0.1, SF=1.7, White = factor("Stockfish 20200407DC", levels = c("LCZero v0.24-sv-t60-3010", "Stockfish 20200407DC")), Result=factor(c("1-0", levels = c("1-0", "1/2-1/2", "0-1"))), game = factor(7, levels=1:100))
 p <- sufi17 %>% 
-  ggplot(aes(Lc0, SF, color = Result, group=game)) + geom_point() + geom_abline(data = data.frame(x=c(0,1.7), y = c(0,1.7)), alpha=0.5) + xlim(c(0,1.7)) + ylim(c(0,1.7))  + 
+  ggplot(aes(Lc0, SF, color = Result, group=game)) + geom_point() + geom_abline(data = data.frame(x=c(0,1.7), y = c(0,1.7)), alpha=0.5) +
   facet_wrap(.~White#, labeller = label_glue('({.l}) White = {White}')
              ) + geom_text(data = ann_text, label = "Game 94", show.legend = F, color = "black") + geom_text(data = ann_text2, label = "Game 7", show.legend = F, color = "black") + geom_text(data = ann_texta, label = "(a)", show.legend = F, color = "black", size=3.5) + geom_text(data = ann_textb, label = "(b)", show.legend = F, color = "black", size=3.5)
 ggplotly(p)
 ```
 </center>
+
+
+
 
 There were only two games that were won as black--one by Stockfish in game 16, where Leela, playing as white, gave an opening evaluation of 0.78 and Stockfish gave an opening evaluation of 0.16; and the other one by Leela in game 95, where Stockfish, playing as white, gave an opening evaluation of 0.90 and Leela gave an opening evaluation of 0.93. 
 
@@ -427,4 +430,86 @@ labs(x='SF',y='Lc0')+
 geom_line(data=predict,aes(x=x,y=y), size=1, color = "blue")
 ```
 
+## Update: 24 April 2020
+
+### Playing Times
+
+```{r}
+library(chron)
+sufi17$GameDuration <- chron(times = sufi17$GameDuration)
+```
+All of the SuFi games went on for a total duration of `r sum(sufi17$GameDuration)` days (except for short intervals between games). The average time for a SuFi game is `r mean(sufi17$GameDuration)` with a standard deviation of `r chron(times = sd(sufi17$GameDuration))`.
+
+The following table shows some summary statistics by ECO code for the whole SuFi.
+
+```{r}
+sufi17 %>%
+  mutate(ECO=str_extract(ECO, "[A-Z]+")) %>%
+  group_by(ECO) %>%
+  summarise(Duration = mean(GameDuration),
+            SD = chron(times = sd(GameDuration)),
+            Min = min(GameDuration),
+            Q1 = quantile(GameDuration, .25),
+            Median = median(GameDuration),
+            Q3 = quantile(GameDuration, .75),
+            Max = max(GameDuration)) %>%
+  flextable() %>%
+  autofit()
+```
+
+The following table shows some summary statistics by ECO code with Leela playing white.
+
+```{r}
+sufi17 %>%
+  filter(White == "LCZero v0.24-sv-t60-3010") %>%
+  mutate(ECO=str_extract(ECO, "[A-Z]+")) %>%
+  group_by(ECO) %>%
+  summarise(Duration = mean(GameDuration),
+            SD = chron(times = sd(GameDuration)),
+            Min = min(GameDuration),
+            Q1 = quantile(GameDuration, .25),
+            Median = median(GameDuration),
+            Q3 = quantile(GameDuration, .75),
+            Max = max(GameDuration)) %>%
+  flextable() %>% autofit()
+```
+
+The following table shows some summary statistics by ECO code with Stockfish playing white.
+
+```{r}
+sufi17 %>%
+  filter(White == "Stockfish 20200407DC") %>%
+  mutate(ECO=str_extract(ECO, "[A-Z]+")) %>%
+  group_by(ECO) %>%
+  summarise(Duration = mean(GameDuration),
+            SD = chron(times = sd(GameDuration)),
+            Min = min(GameDuration),
+            Q1 = quantile(GameDuration, .25),
+            Median = median(GameDuration),
+            Q3 = quantile(GameDuration, .75),
+            Max = max(GameDuration)) %>%
+  flextable() %>% autofit()
+```
+
+### Which engine is a better predictor of wins?
+
+Alexander Lyashuk (crem), one of Leela's lead developers, pointed me to a plot that he made that shows how the opening evaluations predict the outcome of each opening. Here is my take with scatter plots. Overall, Leela is a better predictor of 1-0 wins, specially when playing as white.
+
+<center>
+```{r, fig.height=5, fig.width=9, fig.cap="Outcome based on engine evaluations"}
+p6 <- data_df %>%
+  mutate(White = sufi17$White) %>%
+  mutate(opening = rep(1:50, each = 2)) %>%
+  group_by(opening) %>%
+  mutate(paired_result = 
+           case_when(first(Result) == "1/2-1/2" & last(Result) == "1/2-1/2"~"Both draws",
+         first(Result) == "1-0" & last(Result) == "1-0"~"Both wins",
+         TRUE~"One Win")) %>%
+  ggplot(aes(Lc0, SF, color = paired_result, group=game)) + 
+  geom_point() +
+  geom_abline(data = data.frame(x=c(0,1.75),y=c(0,1.75)), alpha = 0.5) +
+  facet_wrap(~White+Result, labeller = label_glue("({.l}) White = {White}\nResult")) 
+p6
+```
+</center>
 
