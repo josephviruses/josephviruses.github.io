@@ -496,7 +496,7 @@ sufi17 %>%
 Alexander Lyashuk (crem), one of Leela's lead developers, pointed me to a plot that he made that shows how the opening evaluations predict the outcome of each opening. Here is my take with scatter plots. Overall, Leela is a better predictor of 1-0 wins, specially when playing as white.
 
 <center>
-```{r, fig.height=5, fig.width=9, fig.cap="Outcome based on engine evaluations"}
+```{r, fig.height=5, fig.width=9, fig.cap="Outcome based on opening engine evaluations"}
 p6 <- data_df %>%
   mutate(White = sufi17$White) %>%
   mutate(opening = rep(1:50, each = 2)) %>%
