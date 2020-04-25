@@ -438,7 +438,7 @@ geom_line(data=predict,aes(x=x,y=y), size=1, color = "blue")
 library(chron)
 sufi17$GameDuration <- chron(times = sufi17$GameDuration)
 ```
-All of the SuFi games went on for a total duration of `r sum(sufi17$GameDuration)` days (except for short intervals between games). The average time for a SuFi game is `r mean(sufi17$GameDuration)` with a standard deviation of `r chron(times = sd(sufi17$GameDuration))`.
+All of the SuFi games went on for a total duration of `r sum(sufi17$GameDuration)` days (except for short intervals between games). The average time for a SuFi game is `r format(as.POSIXct(as.numeric(mean(sufi17$GameDuration))* 86400, origin = "1970-01-01", tz = "UTC"), "%H:%M")` with a standard deviation of `r format(as.POSIXct(as.numeric(chron(times = sd(sufi17$GameDuration)))*86400, origin="1970-01-01", tz="UTC"), "%H:%M")`.
 
 The following table shows some summary statistics by ECO code for the whole SuFi.
 
@@ -508,7 +508,7 @@ p6 <- data_df %>%
   ggplot(aes(Lc0, SF, color = paired_result, group=game)) + 
   geom_point() +
   geom_abline(data = data.frame(x=c(0,1.75),y=c(0,1.75)), alpha = 0.5) +
-  facet_wrap(~White+Result, labeller = label_glue("({.l}) White = {White}\nResult")) 
+  facet_wrap(~White+Result, labeller = label_glue("({.l}) White = {White}\nResult={Result}")) 
 p6
 ```
 </center>
